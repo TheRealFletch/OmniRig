@@ -282,10 +282,10 @@ begin
 end;
 
 procedure TRigX.Set_Mode(Value: RigParamX);
-var
-  NewMode: TRigParam;
+//var
+//  NewMode: TRigParam;
 begin
-  NewMode := IntToParam(Value);
+//  NewMode := IntToParam(Value);
   if MainForm.SetBothModes
     then SetBothModes(Value)
     else FRig.Mode := IntToParam(Value);
@@ -483,7 +483,7 @@ procedure TRigX.SendCustomCommand(Command: OleVariant;
   ReplyLength: Integer; ReplyEnd: OleVariant);
 var
    Cmd: TByteArray;
-   Trm: AnsiString;
+   Trm: string;
 begin
   case VarType(Command) of
     varByte + varArray: Cmd := SafeArrayToBytes(Command);

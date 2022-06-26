@@ -33,7 +33,7 @@ type
     CustSender: Pointer;  //COM object that sent custom command
 
     ReplyLength: integer;
-    ReplyEnd: AnsiString;
+    ReplyEnd: string;
 
     function NeedsReply: boolean;
   end;

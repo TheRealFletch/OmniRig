@@ -37,7 +37,6 @@ object MainForm: TMainForm
     0001800000018000000180000001800000018000000180000001800000018000
     0001800000018000000180000001800000018000000180000001FFFFFFFF}
   KeyPreview = True
-  OldCreateOrder = False
   Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate

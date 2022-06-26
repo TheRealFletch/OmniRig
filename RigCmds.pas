@@ -92,7 +92,7 @@ type
   TRigCommands = class
   private
     FIni: TIniFile;
-    FSection, FEntry: AnsiString;
+    FSection, FEntry: String;
     FList: TAlStringList;
     WasError: boolean;
 
@@ -100,12 +100,12 @@ type
     procedure LoadStatusCmd;
     procedure LoadWriteCmd;
 
-    procedure Log(AMessage: AnsiString; ShowValue: boolean = true);
+    procedure Log(AMessage: string; ShowValue: boolean = true);
 
-    function StrToParam(S: AnsiString; ShowInLog: boolean = true): TRigParam;
-    function StrToFmt(S: AnsiString): TValueFormat;
-    function StrToBytes(S: AnsiString): TByteArray;
-    function StrToMask(S: AnsiString): TBitMask;
+    function StrToParam(S: string; ShowInLog: boolean = true): TRigParam;
+    function StrToFmt(S: string): TValueFormat;
+    function StrToBytes(S: String): TByteArray;
+    function StrToMask(S: string): TBitMask;
 
     procedure Clear(var Rec: TRigCommand); overload;
     procedure Clear(var Rec: TParamValue); overload;
@@ -114,13 +114,13 @@ type
     function LoadCommon: TRigCommand;
     function LoadValue: TParamValue;
 
-    procedure ValidateEntryNames(Names: array of AnsiString);
+    procedure ValidateEntryNames(Names: array of string);
     procedure ValidateMask(AMask: TBitMask; ALen: integer; AEnd: TByteArray);
     procedure ValidateValue(AValue: TParamValue; ALen: integer);
 
     procedure ListSupportedParams;
   public
-    RigType: AnsiString;
+    RigType: string;
     InitCmd: TRigCommandArray;
     WriteCmd: array [TRigParam] of TRigCommand;
     StatusCmd: TRigCommandArray;
@@ -131,8 +131,8 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure FromIni(AFileName: TFileName);
-    function ParamToStr(Param: TRigParam): AnsiString;
-    function ParamListToStr(Params: TRigParamSet): AnsiString;
+    function ParamToStr(Param: TRigParam): string;
+    function ParamListToStr(Params: TRigParamSet): string;
   end;
 
 
@@ -165,12 +165,12 @@ begin
 end;
 
 
-procedure TRigCommands.Log(AMessage: AnsiString; ShowValue: boolean = true);
+procedure TRigCommands.Log(AMessage: string; ShowValue: boolean = true);
 var
-  Value: AnsiString;
+  Value: string;
 begin
   if ShowValue and (FEntry <> '')
-    then Value := 'in "' + AnsiString(FIni.ReadString(FSection, FEntry, '')) + '"'
+    then Value := 'in "' + FIni.ReadString(FSection, FEntry, '') + '"'
     else Value := '';
 
   FLog.Add(Format('[%s].%s:  %s %s', [FSection, FEntry, AMessage, Value]));
@@ -439,7 +439,7 @@ end;
 //------------------------------------------------------------------------------
 //                        conversion functions
 //------------------------------------------------------------------------------
-function TRigCommands.StrToFmt(S: AnsiString): TValueFormat;
+function TRigCommands.StrToFmt(S: string): TValueFormat;
 var
  i: integer;
 begin
@@ -451,7 +451,8 @@ begin
 end;
 
 
-function TRigCommands.StrToParam(S: AnsiString; ShowInLog: boolean): TRigParam;
+function TRigCommands.StrToParam(S: string; ShowInLog: boolean = true):
+    TRigParam;
 var
  i: integer;
 begin
@@ -463,13 +464,13 @@ begin
 end;
 
 
-function TRigCommands.ParamToStr(Param: TRigParam): AnsiString;
+function TRigCommands.ParamToStr(Param: TRigParam): string;
 begin
   Result := GetEnumName(TypeInfo(TRigParam), integer(Param));
 end;
 
 
-function TRigCommands.StrToBytes(S: AnsiString): TByteArray;
+function TRigCommands.StrToBytes(S: String): TByteArray;
 var
   i: integer;
 begin
@@ -487,7 +488,7 @@ begin
     end
 
   //hex
-  else if S[1] in ['0'..'9', 'A'..'F'] then
+  else if CharInSet(S[1], ['0'..'9', 'A'..'F']) then
     begin
     for i:=Length(S) downto 1 do if S[i] = '.' then Delete(S, i, 1);
     if Length(S) mod 2 <> 0 then Abort;
@@ -525,7 +526,7 @@ end;
 //Validation=FEFEE05EFBFD
 //Validation=FFFFFFFF.FF.0000000000.FF|FEFEE05E.03.0000000000.FD
 
-function TRigCommands.StrToMask(S: AnsiString): TBitMask;
+function TRigCommands.StrToMask(S: string): TBitMask;
 begin
   Result.Param := pmNone;
   Result.Mask := nil;
@@ -624,10 +625,10 @@ begin
 end;
 
 
-procedure TRigCommands.ValidateEntryNames(Names: array of AnsiString);
+procedure TRigCommands.ValidateEntryNames(Names: array of string);
 var
   i, j: integer;
-  S1, S2: AnsiString;
+  S1, S2: string;
   Ok: boolean;
 begin
   FIni.ReadSection(FSection, FList);
@@ -678,7 +679,7 @@ begin
 end;
 
 
-function TRigCommands.ParamListToStr(Params: TRigParamSet): AnsiString;
+function TRigCommands.ParamListToStr(Params: TRigParamSet): string;
 var
   p: TRigParam;
 begin

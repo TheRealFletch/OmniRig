@@ -28,7 +28,9 @@ type
     FConnectionPoints: TConnectionPoints;
     FConnectionPoint: TConnectionPoint;
     FSinkList: TList;
+    {$WARN SYMBOL_PLATFORM OFF}
     FEvents: IOmniRigXEvents;
+    {$WARN SYMBOL_PLATFORM ON}
 
     RigX1, RigX2: TRigX;
   public
@@ -69,7 +71,7 @@ procedure DoComNotifyCustom(RigNumber: integer; Sender: Pointer);
 implementation
 
 uses
-  ComServ, Main;
+  ComServ, Main, System.Types;
 
 
 //------------------------------------------------------------------------------
@@ -85,7 +87,9 @@ end;
 
 procedure TOmniRigX.EventSinkChanged(const EventSink: IUnknown);
 begin
+  {$WARN SYMBOL_PLATFORM OFF}
   FEvents := EventSink as IOmniRigXEvents;
+  {$WARN SYMBOL_PLATFORM ON}
   if FConnectionPoint <> nil then FSinkList := FConnectionPoint.SinkList;
 end;
 

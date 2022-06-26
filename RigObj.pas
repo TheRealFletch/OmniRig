@@ -70,7 +70,8 @@ type
   public
     //add command to the queue
     procedure AddWriteCommand(AParam: TRigParam; AValue: integer = 0); override;
-    procedure AddCustomCommand(ASender: Pointer; ACode: TByteArray; ALen: integer; AEnd: AnsiString); override;
+    procedure AddCustomCommand(ASender: Pointer; ACode: TByteArray; ALen: integer;
+        AEnd: string); override;
   end;
 
 
@@ -106,8 +107,8 @@ begin
 end;
 
 
-procedure TRig.AddCustomCommand(ASender: Pointer; ACode: TByteArray;
-  ALen: integer; AEnd: AnsiString);
+procedure TRig.AddCustomCommand(ASender: Pointer; ACode: TByteArray; ALen:
+    integer; AEnd: string);
 begin
   if ACode = nil then Exit;
 
@@ -299,7 +300,7 @@ end;
 procedure TRig.ToText(Arr: TByteArray; Value: integer);
 var
   Len: integer;
-  S: AnsiString;
+  S: string;
 begin
   Len := Length(Arr);
   if Value < 0 then Dec(Len);
@@ -314,7 +315,7 @@ end;
 // Added by RA6UAZ for Icom Marine Radio NMEA Command
 procedure TRig.ToDPIcom(Arr: TByteArray; Value: integer);
 var
-  S: AnsiString;
+  S: string;
   F: single;
 begin
   {$IFNDEF VER200}FormatSettings.{$ENDIF}  DecimalSeparator := '.';
@@ -326,7 +327,7 @@ end;
 
 procedure TRig.ToTextUD(Arr: TByteArray; Value: integer);
 var
-  S: AnsiString;
+  S: string;
 begin
   S := StringOfChar('0', Length(Arr)) + IntToStr(Abs(Value));
   if Value >= 0 then Arr[0] := Ord('U') else Arr[0] := Ord('D');
@@ -396,7 +397,7 @@ end;
 
 procedure TRig.ToFloat(Arr: TByteArray; Value: integer);
 var
-  S: AnsiString;
+  S: string;
 begin
   {$IFNDEF VER200}FormatSettings.{$ENDIF}  DecimalSeparator := '.';
   S := Format('%.2f', [Length(Arr), Value]);
@@ -439,7 +440,7 @@ end;
 
 function TRig.FromText(AData: TByteArray): integer;
 var
-  S: AnsiString;
+  S: string;
 begin
   SetLength(S, Length(AData));
 
@@ -455,7 +456,7 @@ end;
 // Added by RA6UAZ for Icom Marine Radio NMEA Command
 function TRig.FromDPIcom(AData: TByteArray): integer;
 var
-  S: AnsiString;
+  S: string;
   i: integer;
 begin
   try
@@ -463,7 +464,7 @@ begin
     SetLength(S, Length(AData));
     Move(Adata[0], S[1], Length(S));
     for i:=1 to Length(S) do
-      if not (S[i] in ['0'..'9','.', ' ']) then
+      if not CharInSet(S[i], ['0'..'9','.', ' ']) then
         begin SetLength(S, i-1); Break; end;
     Result := Round(1E6 * StrToFloat(Trim(S)));
   except
@@ -494,14 +495,14 @@ end;
 
 function TRig.FromBcdBU(AData: TByteArray): integer;
 var
-  S: AnsiString;
+  S: string;
   i: integer;
 begin
   SetLength(S, Length(AData) * 2);
   for i:=0 to High(AData) do
     begin
-    S[i*2+1] := AnsiChar(Ord('0') + ((AData[i] shr 4) and $0F));
-    S[i*2+2] := AnsiChar(Ord('0') + (AData[i] and $0F));
+    S[i*2+1] := Char(Ord('0') + ((AData[i] shr 4) and $0F));
+    S[i*2+2] := Char(Ord('0') + (AData[i] and $0F));
     end;
 
   try
@@ -548,7 +549,7 @@ end;
 
 function TRig.FromFloat(AData: TByteArray): integer;
 var
-  S: AnsiString;
+  S: string;
 begin
   try
     SetLength(S, Length(AData));

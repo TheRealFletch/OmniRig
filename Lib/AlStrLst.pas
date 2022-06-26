@@ -109,7 +109,7 @@ begin
   try
     Clear;
     P := PChar(AText);
-    while P^ in [#1..#31] do P := CharNext(P);
+    while CharInSet(P^, [#1..#31]) do P := CharNext(P);
     while P^ <> #0 do
     begin
       if P^ = '"' then
@@ -121,11 +121,11 @@ begin
         SetString(S, P1, P - P1);
       end;
       Add(S);
-      while P^ in [#1..#31] do P := CharNext(P);
+      while CharInSet(P^, [#1..#31]) do P := CharNext(P);
       if P^ = FDelimiter then
         repeat
           P := CharNext(P);
-        until not (P^ in [#1..#31]);
+        until not CharInSet(P^, [#1..#31]);
     end;
   finally
     EndUpdate;

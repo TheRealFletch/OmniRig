@@ -108,8 +108,8 @@ type
 
     procedure ForceForeground;
     function GetVersion: integer;
-    procedure Log(Msg: AnsiString); overload;
-    procedure Log(Msg: AnsiString; const Args: array of const); overload;
+    procedure Log(Msg: string); overload;
+    procedure Log(Msg: string; const Args: array of const); overload;
   end;
 
 var
@@ -426,11 +426,6 @@ begin
 end;
 
 
-
-
-
-
-
 //------------------------------------------------------------------------------
 //                           single instance
 //------------------------------------------------------------------------------
@@ -529,15 +524,15 @@ begin
 end;
 
 
-procedure TMainForm.Log(Msg: AnsiString; const Args: array of const);
+procedure TMainForm.Log(Msg: string; const Args: array of const);
 begin
   Log(Format(Msg, Args));
 end;
 
 
-procedure TMainForm.Log(Msg: AnsiString);
+procedure TMainForm.Log(Msg: string);
 var
-  S: AnsiString;
+  S: string;
 begin
   //logging disabled
   if (FLog = nil) or (FLogMode = 0) then Exit;
@@ -555,7 +550,7 @@ begin
 
   S := FormatDateTime('hh:nn:ss.zzz  ', Now) + Msg;
   if Copy(S, Length(S)-1, 2) <> #13#10 then S := S + #13#10;
-  FLog.WriteBuffer(PAnsiChar(S)^, Length(S));
+  FLog.WriteBuffer(PChar(S)^, Length(S));
 end;
 
 
@@ -573,13 +568,6 @@ procedure TMainForm.WmComCustom(var Msg: TMessage);
 begin
   DoComNotifyCustom(Msg.WParam, Pointer(Msg.LParam));
 end;
-
-
-
-
-
-
-
 
 procedure TMainForm.Label15Click(Sender: TObject);
 begin

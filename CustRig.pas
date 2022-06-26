@@ -104,8 +104,8 @@ type
 
     procedure AddWriteCommand(AParam: TRigParam; AValue: integer = 0);
       virtual; abstract;
-    procedure AddCustomCommand(ASender: Pointer; ACode: TByteArray;
-      ALen: integer; AEnd: AnsiString); virtual; abstract;
+    procedure AddCustomCommand(ASender: Pointer; ACode: TByteArray; ALen: integer;
+        AEnd: string); virtual; abstract;
 
     procedure Lock;
     procedure UnLock;
@@ -115,7 +115,7 @@ type
     procedure CheckQueue;
     procedure ForceVfo(const Value: TRigParam);
 
-    function GetStatusStr: AnsiString;
+    function GetStatusStr: string;
 
 
     property RigCommands: TRigCommands read FRigCommands write SetRigCommands;
@@ -193,9 +193,9 @@ begin
 end;
 
 
-function TCustomRig.GetStatusStr: AnsiString;
+function TCustomRig.GetStatusStr: string;
 const
-  StatusStr: array[TRigCtlStatus] of AnsiString =
+  StatusStr: array[TRigCtlStatus] of string =
     ('Rig is not configured', 'Rig is disabled', 'Port is not available',
      'Rig is not responding', 'On-line');
 begin
@@ -401,7 +401,7 @@ end;
 
 procedure TCustomRig.CheckQueue;
 var
-  S: AnsiString;
+  S: string;
 begin
   Lock;
   if ComPort.Open and (FQueue.Phase = phIdle) and (FQueue.Count > 0) then

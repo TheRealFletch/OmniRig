@@ -25,12 +25,12 @@ type
 function BytesAnd(Arr1, Arr2: TByteArray): TByteArray;
 function BytesEqual(Arr1, Arr2: TByteArray): boolean;
 procedure BytesReverse(Arr: TByteArray);
-function BytesToStr(Bytes: TByteArray): AnsiString;
-function StrToBytes(S: AnsiString): TByteArray;
+function BytesToStr(Bytes: TByteArray): string;
+function StrToBytes(S: string): TByteArray;
 function BytesToSafeArray(Bytes: TByteArray): Variant;
 function SafeArrayToBytes(Arr: Variant): TByteArray;
-function BytesToHex(Bytes: TByteArray): AnsiString;
-function StrToHex(S: AnsiString): AnsiString;
+function BytesToHex(Bytes: TByteArray): string;
+function StrToHex(S: string): string;
 
 implementation
 
@@ -76,7 +76,7 @@ begin
 end;
 
 
-function BytesToStr(Bytes: TByteArray): AnsiString;
+function BytesToStr(Bytes: TByteArray): string;
 var
   Len: integer;
 begin
@@ -86,7 +86,7 @@ begin
 end;
 
 
-function StrToBytes(S: AnsiString): TByteArray;
+function StrToBytes(S: string): TByteArray;
 var
   Len: integer;
 begin
@@ -139,18 +139,18 @@ begin
 end;
 
 
-function BytesToHex(Bytes: TByteArray): AnsiString;
+function BytesToHex(Bytes: TByteArray): string;
 var
   i: integer;
 begin
   Result := '';
   if Bytes = nil then Exit;
 
-  for i:=0 to High(Bytes) do Result := Result + AnsiString(IntToHex(Bytes[i], 2));
+  for i:=0 to High(Bytes) do Result := Result + IntToHex(Bytes[i], 2);
 end;
 
 
-function StrToHex(S: AnsiString): AnsiString;
+function StrToHex(S: string): string;
 begin
   Result := BytesToHex(StrToBytes(S));
 end;

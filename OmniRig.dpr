@@ -15,7 +15,9 @@ uses
   AutoPort in 'AutoPort.pas' {PortBits: CoClass},
   AlComPrt in 'Lib\AlComPrt.pas',
   AlStrLst in 'Lib\AlStrLst.pas',
-  ScrFctry in 'Lib\ScrFctry.pas';
+  ScrFctry in 'Lib\ScrFctry.pas',
+  Vcl.Themes,
+  Vcl.Styles;
 
 {$R *.TLB}
 
@@ -24,6 +26,7 @@ uses
 begin
   //MemChk;
   Application.Initialize;
+  TStyleManager.TrySetStyle('Windows10 Dark');
   Application.CreateForm(TMainForm, MainForm);
   Application.Title := 'Omni-Rig';
   Application.Run;

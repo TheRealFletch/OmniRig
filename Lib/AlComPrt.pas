@@ -101,18 +101,18 @@ type
     procedure SetRtsMode(const Value: TFlowControl);
   public
     Port: integer;
-    RxBuffer: AnsiString;
+    RxBuffer: string;
     TimeStamp: Int64;
 
     RxBlockMode: TRxBlockMode;
     RxBlockSize: integer;
-    RxBlockTerminator: AnsiString;
+    RxBlockTerminator: string;
 
     constructor Create;
     destructor Destroy; override;
     procedure PurgeRx;
     procedure PurgeTx;
-    procedure Send(Msg: AnsiString);
+    procedure Send(Msg: string);
     function TxQueue: integer;
 
     property BaudRate: integer read GetBaudRate write SetBaudRate;
@@ -154,7 +154,9 @@ begin
   WtOverlapped.hEvent := FWaitEvents[1];
 
   //do not replace with Start, does not work
+  {$WARN SYMBOL_DEPRECATED OFF}
   Resume;
+  {$WARN SYMBOL_DEPRECATED ON}
 end;
 
 
@@ -402,7 +404,7 @@ begin
 end;
 
 
-procedure TAlCommPort.Send(Msg: AnsiString);
+procedure TAlCommPort.Send(Msg: string);
 var
   Cnt: DWORD;
 begin
